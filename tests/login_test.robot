@@ -9,6 +9,8 @@ Suite Teardown    Close Browser
 *** Variables ***
 ${EMAIL}      %{PV_EMAIL}
 ${PASSWORD}   %{PV_PASSWORD}
+${email_invalido}      qualquer coisa
+${erro_email_invalido}      text=Não conseguimos encontrar sua conta.
 
 *** Test Cases ***
 
@@ -24,4 +26,11 @@ Login Com Sucesso
     Wait For Load State    networkidle    timeout=${TIMEOUT}
     Get Url    ==    https://tremdepassageiros-pv-qa.valeglobal.net/
     Get Element    ${COMPRA_HEADING}
+    
+Login Com Email Invalido
+    New Page       ${BASE_URL}
+    Wait For Load State    networkidle
+    Fazer Login    ${email_invalido}     ${PASSWORD}
+    Wait For Elements State    ${erro_email_invalido}    
+    
     
