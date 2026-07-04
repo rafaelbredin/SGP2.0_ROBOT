@@ -7,10 +7,11 @@ Suite Setup       New Browser    ${BROWSER}    headless=${HEADLESS}
 Suite Teardown    Close Browser
 
 *** Variables ***
-${EMAIL}      %{PV_EMAIL}
-${PASSWORD}   %{PV_PASSWORD}
+${EMAIL}      rafaelbreder10@gmail.com
+${PASSWORD}   Vaisefude01@
 ${email_invalido}      qualquer coisa
 ${erro_email_invalido}      text=Não conseguimos encontrar sua conta.
+${email_vazio}      ""
 
 *** Test Cases ***
 
@@ -33,4 +34,8 @@ Login Com Email Invalido
     Fazer Login    ${email_invalido}     ${PASSWORD}
     Wait For Elements State    ${erro_email_invalido}    
     
-    
+Login Com Email Invalido
+    New Page       ${BASE_URL}
+    Wait For Load State    networkidle
+    Fazer Login    ${email_vazio}      ""
+    Wait For Elements State    ${erro_email_invalido}    
