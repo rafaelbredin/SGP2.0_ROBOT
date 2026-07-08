@@ -20,4 +20,7 @@ Comprar Passagem
     Fazer Login    ${EMAIL}    ${PASSWORD}  
 
     Preencher Campos de Viagem
+    Preencher Informacoes da Viagem
+    Confirmar Comprar
+    Validar Bilhete Gerado
 
