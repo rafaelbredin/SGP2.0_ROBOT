@@ -249,30 +249,44 @@ O script `run_tests.sh`, na raiz do projeto, ativa o venv, carrega o `.env` e ro
 ./run_tests.sh --include minhatag tests/
 ```
 
-### Windows — via PowerShell
+### Windows — usando `run_tests.ps1` (recomendado)
 
-Ative o ambiente virtual e exporte as variáveis de ambiente ([veja a seção anterior](#variáveis-de-ambiente)) antes de cada comando abaixo.
+`./run_tests.sh` **não funciona no Windows** — é um script bash e o Windows Explorer/PowerShell tenta abri-lo em vez de executá-lo. Use o `run_tests.ps1` equivalente, que ativa o venv, carrega o `.env` e roda o robot.
 
-```powershell
-venv\Scripts\activate
-```
+> Se for a primeira vez rodando um script `.ps1` nesta máquina, libere a execução (uma vez só): `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned`
 
 **Rodar todos os testes:**
 
 ```powershell
-python -m robot --outputdir results tests/
+.\run_tests.ps1
 ```
 
 **Rodar um arquivo específico:**
 
 ```powershell
-python -m robot --outputdir results tests\login_test.robot
+.\run_tests.ps1 tests/login_test.robot
+.\run_tests.ps1 tests/comprar_passar_test.robot
+```
+
+**Rodar um teste específico:**
+
+```powershell
+.\run_tests.ps1 --test "Login Com Sucesso" tests/login_test.robot
 ```
 
 **Rodar testes com uma tag específica:**
 
 ```powershell
-python -m robot --outputdir results --include minhatag tests/
+.\run_tests.ps1 --include minhatag tests/
+```
+
+### Windows — via PowerShell manual (alternativa)
+
+Ative o ambiente virtual e exporte as variáveis de ambiente ([veja a seção anterior](#variáveis-de-ambiente)) antes de cada comando abaixo.
+
+```powershell
+venv\Scripts\activate
+python -m robot --outputdir results tests/
 ```
 
 ### Visualizar o relatório
@@ -307,6 +321,7 @@ SGP2.0_ROBOT/
 ├── venv/             # ambiente virtual (ignorado pelo Git)
 ├── .env               # credenciais locais (ignorado pelo Git, ver .env.example)
 ├── run_tests.sh        # carrega o .env e roda os testes (macOS/Linux)
+├── run_tests.ps1        # carrega o .env e roda os testes (Windows)
 ├── requirements.txt
 └── README.md
 ```
@@ -349,6 +364,10 @@ python -m Browser.entry init
 ### `Environment variable '%{PV_EMAIL}' not found`
 
 As variáveis de ambiente `PV_EMAIL` e `PV_PASSWORD` não foram configuradas. Veja a seção [Variáveis de ambiente](#variáveis-de-ambiente).
+
+### `./run_tests.sh` abre o arquivo em vez de executar (Windows)
+
+`run_tests.sh` é um script bash e não roda nativamente no Windows fora do Git Bash/WSL. Use `.\run_tests.ps1` no PowerShell — veja [Executando os testes](#executando-os-testes).
 
 ---
 
