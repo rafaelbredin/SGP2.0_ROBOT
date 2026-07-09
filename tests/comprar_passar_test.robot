@@ -24,4 +24,7 @@ Comprar Passagem
     Confirmar Compra   
     Preencher Dados de Pagamento
     Finalizar Pagamento
-    
+    Validar Nova Pagina
+    Continuar Na Pagina De Viagens
+    Validar Proxima Pagina
+    Fechar Modal PDF

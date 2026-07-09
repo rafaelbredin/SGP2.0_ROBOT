@@ -61,7 +61,7 @@ ${NOME_SOCIAL}                      Rafael
 ${DATA_NASCIMENTO}                  01/01/2000
 ${CPF}                              73316388079
 ${TELEFONE}                         99999999999
-${NOME_PASSAGEIRO}                  RF AUTOMACAO
+${NOME_PASSAGEIRO}                  AT
 ${EMAIL}                            teste@gmail.com
 ${DOCUMENTO}                        12345678
 
@@ -242,16 +242,67 @@ Preencher Dados de Pagamento
 Finalizar Pagamento
     Log    Preparando finalização do pagamento
 
-    Scroll To    bottom
+    Wait For Elements State    xpath=//*[@id="app"]/div[2]/div[2]/div[2]/div/div[2]/div[1]/div[1]/div[2]/button    visible    timeout=60s
+
+    Scroll To Element    xpath=//*[@id="app"]/div[2]/div[2]/div[2]/div/div[2]/div[1]/div[1]/div[2]/button
 
     Sleep    3s
 
-    Wait For Elements State
-    xpath=//*[@id="app"]/div[2]/div[2]/div[2]/div/div[2]/div[1]/div[1]/div[2]/button
-    visible
-    timeout=60s
+    Click    xpath=//*[@id="app"]/div[2]/div[2]/div[2]/div/div[2]/div[1]/div[1]/div[2]/button
 
-    Click
-    xpath=//*[@id="app"]/div[2]/div[2]/div[2]/div/div[2]/div[1]/div[1]/div[2]/button
+    Log    Clique realizado, aguardando redirecionamento
 
     Sleep    10s
+
+
+Validar Nova Pagina
+    ${URL_ATUAL}=    Get Url
+    Log    URL atual: ${URL_ATUAL}
+
+    Wait For Elements State    xpath=//body    visible    timeout=60s
+
+    Sleep    5s
+
+
+Continuar Na Pagina De Viagens
+    Log    Procurando botão Continuar na nova página
+
+    Wait For Elements State    xpath=//*[@id="app"]/div[2]/div[2]/div[2]/div/div[3]/div/div/div/button    visible    timeout=60s
+
+    Scroll To Element    xpath=//*[@id="app"]/div[2]/div[2]/div[2]/div/div[3]/div/div/div/button
+
+    Sleep    3s
+
+    Click    xpath=//*[@id="app"]/div[2]/div[2]/div[2]/div/div[3]/div/div/div/button
+
+    Log    Botão Continuar clicado
+
+    Sleep    10s
+
+    Log    Navegador mantido aberto para análise
+
+    Sleep    300s
+
+Validar Proxima Pagina
+    Log    Validando abertura da página travels
+
+    Wait For Elements State    xpath=//body    visible    timeout=60s
+
+    ${URL_ATUAL}=    Get Url
+    Log    URL atual: ${URL_ATUAL}
+
+    Should Contain    ${URL_ATUAL}    /travels
+
+    Log    Página travels carregada com sucesso
+
+
+Fechar Modal PDF
+    Log    Fechando modal do PDF
+
+    Wait For Elements State    xpath=//*[@id="radix-:r3:"]/button/span    visible    timeout=60s
+
+    Click    xpath=//*[@id="radix-:r3:"]/button/span
+
+    Log    Modal do PDF fechado
+
+    Sleep    3s
