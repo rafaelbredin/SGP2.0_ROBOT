@@ -18,8 +18,8 @@ Comprar Passagem
     New Page       ${BASE_URL}
     Wait For Load State    networkidle
     Fazer Login    ${EMAIL}    ${PASSWORD}  
-
-    Preencher Campos de Viagem
+    
+    Preencher Campos de Viagem - So Ida - EFC - Tarifa Normal
     Preencher Informacoes da Viagem
     Confirmar Compra   
     Preencher Dados de Pagamento

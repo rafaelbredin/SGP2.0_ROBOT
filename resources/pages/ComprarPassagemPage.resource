@@ -78,20 +78,27 @@ Fechar Modal De Boas Vindas
     Wait For Elements State    ${BTN_MODAL_OK}    visible    timeout=15s
     Click                      ${BTN_MODAL_OK}
 
-
-Preencher Campos de Viagem
+Limpar Selecoes
     Wait For Elements State    ${BTN_LIMPAR_SELECOES}    visible    timeout=30s
     Click                      ${BTN_LIMPAR_SELECOES}
     Sleep                      2s
 
+Selecionar Tipo de Viagem - So Ida
     Wait For Elements State    ${BTN_VIAGEM_SO_IDA}    visible    timeout=30s
     Click                      ${BTN_VIAGEM_SO_IDA}
-    Sleep                      3s
+    Sleep                      2s
 
+Selecionar Tipo de Viagem - Ida e Volta
+    Wait For Elements State    ${BTN_VIAGEM_SO_IDA}    visible    timeout=30s
+    Click                      ${BTN_VIAGEM_SO_IDA}
+    Sleep                      2s
+
+Selecionar Ferrovia - EFC
     Wait For Elements State    ${OPCAO_FERROVIA_EFC}    visible    timeout=30s
     Click                      ${OPCAO_FERROVIA_EFC}
     Sleep                      2s
 
+Selecionar Origem e Destino
     Click                      ${CAMPO_ORIGEM}
     Wait For Elements State    ${CIDADE_ORIGEM}    visible    timeout=30s
     Click                      ${CIDADE_ORIGEM}
@@ -100,11 +107,13 @@ Preencher Campos de Viagem
     Wait For Elements State    ${CIDADE_DESTINO}    visible    timeout=30s
     Click                      ${CIDADE_DESTINO}
 
+Selecionar Data da Viagem
     Click                      ${CAMPO_DATA}
     Wait For Elements State    ${DATA_ESCOLHIDA}    visible    timeout=30s
     Click                      ${DATA_ESCOLHIDA}
     Sleep                      3s
 
+Selecionar Tipo de Passagem - Tarifa Normal
     Wait For Elements State    ${BTN_TIPO_PASSAGEM}    enabled    timeout=60s
     Click                      ${BTN_TIPO_PASSAGEM}
 
@@ -116,9 +125,11 @@ Preencher Campos de Viagem
     Wait For Elements State    ${BTN_MAIS_ADULTO}    enabled    timeout=30s
     Click                      ${BTN_MAIS_ADULTO}
 
+Confirmar Passageiros
     Wait For Elements State    ${BTN_CONFIRMAR_PASSAGEIROS}    enabled    timeout=30s
     Click                      ${BTN_CONFIRMAR_PASSAGEIROS}
 
+Seguir Para a Escolha de Assentos
     Wait For Elements State    ${BTN_SEGUIR_ESCOLHA_ASSENTOS}    enabled    timeout=60s
     Click                      ${BTN_SEGUIR_ESCOLHA_ASSENTOS}
 
@@ -129,9 +140,26 @@ Preencher Campos de Viagem
 
     Sleep                      5s
 
+Preencher Campos de Viagem - So Ida - EFC - Tarifa Normal
+    Limpar Selecoes
+    Selecionar Tipo de Viagem - So Ida
+    Selecionar Ferrovia - EFC
+    Selecionar Origem e Destino
+    Selecionar Data da Viagem
+    Selecionar Tipo de Passagem - Tarifa Normal
+    Confirmar Passageiros
+    Seguir Para a Escolha de Assentos
+
+    
+
+
+    
+
+    
+
 
 Gerar Massa De Dados Aleatoria
-    ${numero}=    Evaluate    random.randint(100,999)    random
+    ${numero}=    Evaluate    random.randint(10000,99999)    random
     ${nome}=      Set Variable    RF AUTOMACAO ${numero}
 
     ${email}=     Evaluate    ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in range(12)) + '@gmail.com'    random
