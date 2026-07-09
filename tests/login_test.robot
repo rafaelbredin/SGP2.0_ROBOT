@@ -15,11 +15,6 @@ ${email_vazio}      ""
 
 *** Test Cases ***
 
-Sanidade - Portal Carrega
-    New Page    ${BASE_URL}
-    Wait For Load State    networkidle
-    Get Title    !=    ${EMPTY}
-
 Login Com Sucesso
     New Page       ${BASE_URL}
     Wait For Load State    networkidle

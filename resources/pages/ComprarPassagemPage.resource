@@ -66,7 +66,7 @@ ${EMAIL}                            teste@gmail.com
 ${DOCUMENTO}                        12345678
 
 # Dados do cartao 
-${CARTAO_TESTE}                     CARTAO_SANDBOX_DO_SEU_GATEWAY
+${CARTAO_TESTE}                     5502 0937 6992 1690
 ${VALIDADE_TESTE}                   12/30
 ${CVV_TESTE}                        123
 ${NOME_CARTAO_TESTE}                CLIENTE TESTE
@@ -204,23 +204,54 @@ Confirmar Compra
 
     Sleep    20s
 
-Preencher Dados de Pagamento 
+Preencher Dados de Pagamento
+    Log    Iniciando preenchimento pagamento
+
     Wait For Elements State    xpath=//*[@id="card_number"]    visible    timeout=60s
+    Log    Campo cartão localizado
+
+    Click                      xpath=//*[@id="card_number"]
     Fill Text                  xpath=//*[@id="card_number"]    ${CARTAO_TESTE}
 
-    Sleep                      2s
+    Sleep                      3s
 
     Wait For Elements State    xpath=//*[@id="card_validity"]    visible    timeout=30s
+    Log    Campo validade localizado
+
+    Click                      xpath=//*[@id="card_validity"]
     Fill Text                  xpath=//*[@id="card_validity"]    ${VALIDADE_TESTE}
 
-    Sleep                      2s
+    Sleep                      3s
 
     Wait For Elements State    xpath=//*[@id="card_cvv"]    visible    timeout=30s
+    Log    Campo CVV localizado
+
+    Click                      xpath=//*[@id="card_cvv"]
     Fill Text                  xpath=//*[@id="card_cvv"]    ${CVV_TESTE}
 
-    Sleep                      2s
+    Sleep                      3s
 
     Wait For Elements State    xpath=//*[@id="card_name"]    visible    timeout=30s
+    Log    Campo nome localizado
+
+    Click                      xpath=//*[@id="card_name"]
     Fill Text                  xpath=//*[@id="card_name"]    ${NOME_CARTAO_TESTE}
 
     Sleep                      3s
+
+Finalizar Pagamento
+    Log    Preparando finalização do pagamento
+
+    Scroll To    bottom
+
+    Sleep    3s
+
+    Wait For Elements State
+    xpath=//*[@id="app"]/div[2]/div[2]/div[2]/div/div[2]/div[1]/div[1]/div[2]/button
+    visible
+    timeout=60s
+
+    Click
+    xpath=//*[@id="app"]/div[2]/div[2]/div[2]/div/div[2]/div[1]/div[1]/div[2]/button
+
+    Sleep    10s

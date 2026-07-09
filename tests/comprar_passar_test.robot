@@ -22,5 +22,6 @@ Comprar Passagem
     Preencher Campos de Viagem
     Preencher Informacoes da Viagem
     Confirmar Compra   
-
-
+    Preencher Dados de Pagamento
+    Finalizar Pagamento
+    
