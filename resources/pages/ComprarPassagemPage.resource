@@ -1,5 +1,7 @@
 *** Settings ***
 Library    Browser
+Library    String
+Library    Collections
 
 
 *** Variables ***
@@ -27,11 +29,11 @@ ${DATA_ESCOLHIDA}                   xpath=(//div[@role="option" and @aria-disabl
 
 # Tipo de passagem
 ${BTN_TIPO_PASSAGEM}                xpath=(//button[contains(normalize-space(.),"Tipos de Passagem") and not(@disabled)])[1]
-${OPCAO_TARIFA_NORMAL}              xpath=(//*[normalize-space(.)="Tarifa Normal"])[last()]
+${OPCAO_TARIFA_NORMAL}              xpath=//div[@title="Tarifa Normal"]
 
 # Passageiros
 ${QTD_ADULTO}                       xpath=(//span[@aria-live="polite"])[1]
-${BTN_MAIS_ADULTO}                  xpath=(//span[@aria-live="polite"]/ancestor::div[contains(@class,"sc-")][1]//button)[last()]
+${BTN_MAIS_ADULTO}    xpath=//div[@role="group" and @aria-label="Tarifa Normal"]//button[last()]
 ${BTN_CONFIRMAR_PASSAGEIROS}        xpath=(//button[contains(normalize-space(.),"Confirmar") and not(@disabled)])[last()]
 
 # Limpar seleção
@@ -55,14 +57,19 @@ ${SELECT_NECESSIDADE_ESPECIAL}      xpath=//select[@id="necessidade-especial-0"]
 ${BTN_SEGUIR_PAGAMENTO}             xpath=(//button[contains(normalize-space(.),"Seguir para Pagamento") and not(@disabled)])[1]
 
 # Massa de dados
-${NOME_PASSAGEIRO}                  Rafael Alves Breder
 ${NOME_SOCIAL}                      Rafael
-${DATA_NASCIMENTO}                  01/01/1950
-${EMAIL}                            rafael@email.com
-${DOCUMENTO}                        14651651
-${CPF}                              10193395606
-${TELEFONE}                         33984044879
-${TIPO_DOCUMENTO}                   RG
+${DATA_NASCIMENTO}                  01/01/2000
+${CPF}                              73316388079
+${TELEFONE}                         99999999999
+${NOME_PASSAGEIRO}                  RF AUTOMACAO
+${EMAIL}                            teste@gmail.com
+${DOCUMENTO}                        12345678
+
+# Dados do cartao 
+${CARTAO_TESTE}                     CARTAO_SANDBOX_DO_SEU_GATEWAY
+${VALIDADE_TESTE}                   12/30
+${CVV_TESTE}                        123
+${NOME_CARTAO_TESTE}                CLIENTE TESTE
 
 
 *** Keywords ***
@@ -100,54 +107,120 @@ Preencher Campos de Viagem
 
     Wait For Elements State    ${BTN_TIPO_PASSAGEM}    enabled    timeout=60s
     Click                      ${BTN_TIPO_PASSAGEM}
+
     Wait For Elements State    ${OPCAO_TARIFA_NORMAL}    visible    timeout=30s
     Click                      ${OPCAO_TARIFA_NORMAL}
 
+    Sleep                      3s
+
     Wait For Elements State    ${BTN_MAIS_ADULTO}    enabled    timeout=30s
     Click                      ${BTN_MAIS_ADULTO}
+
     Wait For Elements State    ${BTN_CONFIRMAR_PASSAGEIROS}    enabled    timeout=30s
     Click                      ${BTN_CONFIRMAR_PASSAGEIROS}
 
     Wait For Elements State    ${BTN_SEGUIR_ESCOLHA_ASSENTOS}    enabled    timeout=60s
     Click                      ${BTN_SEGUIR_ESCOLHA_ASSENTOS}
+
     Sleep                      5s
 
     Wait For Elements State    ${BTN_CONCORDAR_TERMOS}    visible    timeout=60s
     Click                      ${BTN_CONCORDAR_TERMOS}
+
     Sleep                      5s
 
+
+Gerar Massa De Dados Aleatoria
+    ${numero}=    Evaluate    random.randint(100,999)    random
+    ${nome}=      Set Variable    RF AUTOMACAO ${numero}
+
+    ${email}=     Evaluate    ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in range(12)) + '@gmail.com'    random
+
+    ${rg}=        Evaluate    str(random.randint(10000000,99999999))    random
+
+    Set Test Variable    ${NOME_PASSAGEIRO}    ${nome}
+    Set Test Variable    ${EMAIL}              ${email}
+    Set Test Variable    ${DOCUMENTO}          ${rg}
+
+
+Preencher Informacoes da Viagem
+    Gerar Massa De Dados Aleatoria
     Wait For Elements State    ${PRIMEIRO_ASSENTO_DISPONIVEL}    visible    timeout=120s
     Click                      ${PRIMEIRO_ASSENTO_DISPONIVEL}
+
     Sleep                      10s
 
     Wait For Elements State    ${CAMPO_NOME}    visible    timeout=120s
     Fill Text                  ${CAMPO_NOME}    ${NOME_PASSAGEIRO}
+
     Sleep                      2s
 
     Wait For Elements State    ${CAMPO_NOME_SOCIAL}    visible    timeout=30s
     Fill Text                  ${CAMPO_NOME_SOCIAL}    ${NOME_SOCIAL}
+
     Sleep                      2s
 
     Wait For Elements State    ${CAMPO_DATA_NASCIMENTO}    visible    timeout=30s
     Fill Text                  ${CAMPO_DATA_NASCIMENTO}    ${DATA_NASCIMENTO}
+
     Sleep                      2s
 
     Wait For Elements State    ${CAMPO_EMAIL}    visible    timeout=30s
     Fill Text                  ${CAMPO_EMAIL}    ${EMAIL}
+
     Sleep                      2s
 
     Wait For Elements State    ${CAMPO_NUMERO_DOCUMENTO}    visible    timeout=30s
     Fill Text                  ${CAMPO_NUMERO_DOCUMENTO}    ${DOCUMENTO}
+
     Sleep                      2s
 
     Wait For Elements State    ${CAMPO_CPF}    visible    timeout=30s
     Fill Text                  ${CAMPO_CPF}    ${CPF}
+
     Sleep                      2s
 
     Wait For Elements State    ${CAMPO_TELEFONE}    visible    timeout=30s
     Fill Text                  ${CAMPO_TELEFONE}    ${TELEFONE}
+
     Sleep                      3s
 
     Wait For Elements State    ${BTN_SEGUIR_PAGAMENTO}    enabled    timeout=60s
     Click                      ${BTN_SEGUIR_PAGAMENTO}
+
     Sleep                      10s
+
+
+Confirmar Compra
+    Wait For Elements State    xpath=//button[contains(normalize-space(.),"Gerar passagem")]    visible    timeout=60s
+
+    Scroll To Element    xpath=//button[contains(normalize-space(.),"Gerar passagem")]
+
+    Click    xpath=//button[contains(normalize-space(.),"Gerar passagem")]
+
+    Wait For Load State    networkidle
+
+    Wait For Elements State    xpath=//body    visible    timeout=30s
+
+    Sleep    20s
+
+Preencher Dados de Pagamento 
+    Wait For Elements State    xpath=//*[@id="card_number"]    visible    timeout=60s
+    Fill Text                  xpath=//*[@id="card_number"]    ${CARTAO_TESTE}
+
+    Sleep                      2s
+
+    Wait For Elements State    xpath=//*[@id="card_validity"]    visible    timeout=30s
+    Fill Text                  xpath=//*[@id="card_validity"]    ${VALIDADE_TESTE}
+
+    Sleep                      2s
+
+    Wait For Elements State    xpath=//*[@id="card_cvv"]    visible    timeout=30s
+    Fill Text                  xpath=//*[@id="card_cvv"]    ${CVV_TESTE}
+
+    Sleep                      2s
+
+    Wait For Elements State    xpath=//*[@id="card_name"]    visible    timeout=30s
+    Fill Text                  xpath=//*[@id="card_name"]    ${NOME_CARTAO_TESTE}
+
+    Sleep                      3s

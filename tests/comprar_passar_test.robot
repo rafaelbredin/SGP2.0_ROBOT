@@ -21,6 +21,6 @@ Comprar Passagem
 
     Preencher Campos de Viagem
     Preencher Informacoes da Viagem
-    Confirmar Comprar
-    Validar Bilhete Gerado
+    Confirmar Compra   
+
 
