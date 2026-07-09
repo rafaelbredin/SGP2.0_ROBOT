@@ -163,7 +163,7 @@ git config --global user.email "seuemail@exemplo.com"
 
 ## Variáveis de ambiente
 
-Os testes utilizam credenciais de login armazenadas em variáveis de ambiente, para não deixar dados sensíveis no código.
+Os testes utilizam credenciais de login armazenadas em variáveis de ambiente, para não deixar dados sensíveis no código. As variáveis são lidas nos arquivos `.robot` com a sintaxe `%{PV_EMAIL}` / `%{PV_PASSWORD}` (variável de ambiente do sistema, não variável do Robot).
 
 ### Variáveis necessárias
 
@@ -172,7 +172,33 @@ Os testes utilizam credenciais de login armazenadas em variáveis de ambiente, p
 | `PV_EMAIL`     | E-mail de login usado nos testes |
 | `PV_PASSWORD`  | Senha de login usada nos testes  |
 
-### Configuração permanente (recomendado)
+### macOS / Linux — via arquivo `.env` (recomendado)
+
+1. Copie o arquivo de exemplo e preencha com suas credenciais:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   ```
+   PV_EMAIL="seuemail@exemplo.com"
+   PV_PASSWORD="suasenha"
+   ```
+
+2. O `.env` **não é carregado automaticamente** pelo Robot Framework — use o script `run_tests.sh` (veja a seção [Executando os testes](#executando-os-testes)), que lê o `.env` e roda os testes em um único comando. O `.env` já está no `.gitignore`, então nunca é versionado.
+
+### macOS / Linux — configuração permanente (alternativa)
+
+Adicione ao final do seu `~/.zshrc` (ou `~/.bashrc`):
+
+```bash
+export PV_EMAIL="seuemail@exemplo.com"
+export PV_PASSWORD="suasenha"
+```
+
+Depois rode `source ~/.zshrc` ou abra um novo terminal. Assim as variáveis ficam disponíveis mesmo rodando `python -m robot` diretamente, sem passar pelo `run_tests.sh`.
+
+### Windows — configuração permanente
 
 1. Pesquise **"Editar variáveis de ambiente do sistema"** no menu Iniciar do Windows
 2. Clique em **Variáveis de Ambiente**
@@ -182,7 +208,7 @@ Os testes utilizam credenciais de login armazenadas em variáveis de ambiente, p
 4. Clique OK em tudo
 5. **Feche e abra um novo terminal** para que as variáveis sejam carregadas
 
-### Configuração temporária (apenas na sessão atual do terminal)
+### Windows — configuração temporária (apenas na sessão atual do terminal)
 
 ```powershell
 $env:PV_EMAIL = "seuemail@exemplo.com"
@@ -193,25 +219,57 @@ $env:PV_PASSWORD = "suasenha"
 
 ## Executando os testes
 
-### Ativar o ambiente virtual
+### macOS / Linux — usando `run_tests.sh` (recomendado)
+
+O script `run_tests.sh`, na raiz do projeto, ativa o venv, carrega o `.env` e roda o robot — tudo em um comando, sem precisar exportar variáveis manualmente toda vez.
+
+**Rodar todos os testes:**
+
+```bash
+./run_tests.sh
+```
+
+**Rodar um arquivo específico:**
+
+```bash
+./run_tests.sh tests/login_test.robot
+./run_tests.sh tests/comprar_passar_test.robot
+```
+
+**Rodar um teste específico** (pelo nome do caso, dentro de um arquivo):
+
+```bash
+./run_tests.sh --test "Login Com Sucesso" tests/login_test.robot
+./run_tests.sh --test "Sanidade - Portal Carrega" tests/login_test.robot
+```
+
+**Rodar testes com uma tag específica:**
+
+```bash
+./run_tests.sh --include minhatag tests/
+```
+
+### Windows — via PowerShell
+
+Ative o ambiente virtual e exporte as variáveis de ambiente ([veja a seção anterior](#variáveis-de-ambiente)) antes de cada comando abaixo.
 
 ```powershell
 venv\Scripts\activate
 ```
 
-### Rodar todos os testes
+**Rodar todos os testes:**
 
 ```powershell
 python -m robot --outputdir results tests/
 ```
 
-### Rodar um arquivo específico
+**Rodar um arquivo específico:**
 
 ```powershell
 python -m robot --outputdir results tests\login_test.robot
 ```
 
-### Rodar testes com uma tag específica
+**Rodar testes com uma tag específica:**
 
 ```powershell
 python -m robot --outputdir results --include minhatag tests/
@@ -221,8 +279,12 @@ python -m robot --outputdir results --include minhatag tests/
 
 Após a execução, os resultados ficam na pasta `results/`. Para abrir o relatório no navegador:
 
+```bash
+open results/report.html      # macOS
+```
+
 ```powershell
-start results\report.html
+start results\report.html     # Windows
 ```
 
 - **`report.html`** → resumo visual dos resultados
@@ -243,6 +305,8 @@ SGP2.0_ROBOT/
 │   └── login_test.robot
 ├── results/          # gerado após execução (ignorado pelo Git)
 ├── venv/             # ambiente virtual (ignorado pelo Git)
+├── .env               # credenciais locais (ignorado pelo Git, ver .env.example)
+├── run_tests.sh        # carrega o .env e roda os testes (macOS/Linux)
 ├── requirements.txt
 └── README.md
 ```

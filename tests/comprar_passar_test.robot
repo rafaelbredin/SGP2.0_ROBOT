@@ -9,8 +9,8 @@ Suite Setup       New Browser    ${BROWSER}    headless=${HEADLESS}
 Suite Teardown    Close Browser
 
 *** Variables ***
-${EMAIL}      rafaelbreder10@gmail.com
-${PASSWORD}   Vaisefude01@
+${EMAIL}      %{PV_EMAIL}
+${PASSWORD}   %{PV_PASSWORD}
 
 *** Test Cases ***
 
