@@ -57,13 +57,13 @@ ${SELECT_NECESSIDADE_ESPECIAL}      xpath=//select[@id="necessidade-especial-0"]
 ${BTN_SEGUIR_PAGAMENTO}             xpath=(//button[contains(normalize-space(.),"Seguir para Pagamento") and not(@disabled)])[1]
 
 # Massa de dados
-${NOME_SOCIAL}                      Rafael
+${NOME_SOCIAL}                      Teste
 ${DATA_NASCIMENTO}                  01/01/2000
-${CPF}                              73316388079
+${CPF}                              99999999999
 ${TELEFONE}                         99999999999
 ${NOME_PASSAGEIRO}                  AT
 ${EMAIL}                            teste@gmail.com
-${DOCUMENTO}                        12345678
+${DOCUMENTO}                        32432432
 
 # Dados do cartao 
 ${CARTAO_TESTE}                     5502 0937 6992 1690
@@ -150,14 +150,6 @@ Preencher Campos de Viagem - So Ida - EFC - Tarifa Normal
     Confirmar Passageiros
     Seguir Para a Escolha de Assentos
 
-    
-
-
-    
-
-    
-
-
 Gerar Massa De Dados Aleatoria
     ${numero}=    Evaluate    random.randint(10000,99999)    random
     ${nome}=      Set Variable    RF AUTOMACAO ${numero}
@@ -170,14 +162,12 @@ Gerar Massa De Dados Aleatoria
     Set Test Variable    ${EMAIL}              ${email}
     Set Test Variable    ${DOCUMENTO}          ${rg}
 
-
-Preencher Informacoes da Viagem
-    Gerar Massa De Dados Aleatoria
+Selecionar Assento Disponivel
     Wait For Elements State    ${PRIMEIRO_ASSENTO_DISPONIVEL}    visible    timeout=120s
     Click                      ${PRIMEIRO_ASSENTO_DISPONIVEL}
-
     Sleep                      10s
 
+Preencher Dados do Passageiro
     Wait For Elements State    ${CAMPO_NOME}    visible    timeout=120s
     Fill Text                  ${CAMPO_NOME}    ${NOME_PASSAGEIRO}
 
@@ -213,6 +203,19 @@ Preencher Informacoes da Viagem
 
     Sleep                      3s
 
+Seguir Para Pagamento
+    Wait For Elements State    ${BTN_SEGUIR_PAGAMENTO}    enabled    timeout=60s
+    Click                      ${BTN_SEGUIR_PAGAMENTO}
+
+    Sleep                      10s
+
+Preencher Informacoes da Viagem
+    Gerar Massa De Dados Aleatoria
+    Selecionar Assento Disponivel
+    Preencher Dados do Passageiro
+    Seguir Para Pagamento
+
+Seguir Para Pagamento
     Wait For Elements State    ${BTN_SEGUIR_PAGAMENTO}    enabled    timeout=60s
     Click                      ${BTN_SEGUIR_PAGAMENTO}
 
