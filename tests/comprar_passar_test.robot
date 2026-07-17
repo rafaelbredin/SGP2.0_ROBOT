@@ -19,11 +19,13 @@ Comprar Passagem
     Wait For Load State    networkidle
     Fazer Login    ${EMAIL}    ${PASSWORD}  
     
-    Preencher Campos de Viagem - So Ida - EFC - Tarifa Normal
-    Preencher Informacoes da Viagem
+    Preencher Campos de Viagem - Ida e Volta - EFC - Tarifa Normal
+    Validar Campos Preenchidos
+    Seguir Para Pagamento
     Confirmar Compra   
     Preencher Dados de Pagamento
     Finalizar Pagamento
+    Confirmar Pagamento Safrapay
     Validar Nova Pagina
     Continuar Na Pagina De Viagens
     Validar Proxima Pagina
